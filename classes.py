@@ -27,7 +27,7 @@ class Manager:
         if name not in self.actions:
             print("Action not defined")
         else:
-            self.actions[name](self, *args, **kwargs)
+            return self.actions[name](self, *args, **kwargs)
 
 
 

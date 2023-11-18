@@ -1,7 +1,7 @@
 from classes import Manager, Product
+from os.path import exists
 
 manager = Manager()
-
 
 @manager.assign("check_history")
 def check_history(manager):
@@ -22,7 +22,10 @@ def check_history(manager):
 
 @manager.assign("export_history")
 def export_history(manager):
-    with open('history.txt', 'w') as file:
+    if not exists('history.txt'):
+        f = open('history.txt', 'w')
+        f.close()
+    with open('history.txt', 'a') as file:
         for line in manager.history:
             file.write(line + '\n')
 
@@ -39,7 +42,7 @@ def export_status(manager):
 def import_status(manager):
     with open('warehouse_status.txt', 'r') as file:
         lines = file.readlines()
-        manager.balance = lines[0]
+        manager.balance = int(lines[0])
         for product in lines[1:]:
             manager.stock.append(eval(product))
 
@@ -57,7 +60,7 @@ def check_stock(manager):
 
 @manager.assign("change_balance")
 def change_balance(manager, amount: int):
-    if 0 < manager.balance + amount:
+    if 0 <= manager.balance + amount:
         manager.balance += amount
 
         with open('warehouse_status.txt', 'r') as file:
@@ -92,7 +95,8 @@ def sale(manager, product: Product):
 
 @manager.assign("purchase")
 def purchase(manager, product: Product):
-    if manager.execute('change_balance', amount=-product.price * product.quant):
+    debt_check = manager.execute('change_balance', amount=-product.price * product.quant)
+    if debt_check:
         existing_product = manager.execute('find_product', search_key=product.name)
         if existing_product:
             existing_product.quant += product.quant
