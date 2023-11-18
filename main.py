@@ -6,7 +6,7 @@ wh = Warehouse()
 wh.import_status() if exists('warehouse_status.txt') else wh.export_status()
 
 while True:
-    print('Lista komend:\nsaldo\nsprzedaż\nzakup\nkonto\nlista\nmagazyn\nprzegląd\nkoniec\n')
+    print('Lista komend:\nsaldo, sprzedaż, zakup, konto, lista, magazyn, przegląd, koniec\n')
 
     command = input('Wprowadź komendę: ')
 

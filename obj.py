@@ -1,3 +1,6 @@
+from os.path import exists
+
+
 class Product:
     def __init__(self, name: str, quant: int, price: int):
         self.name = name.lower()
@@ -32,7 +35,10 @@ class Warehouse:
             print('Podaj liczby lub brak wartości(enter)')
 
     def export_history(self):
-        with open('history.txt', 'w') as file:
+        if not exists('history.txt'):
+            f = open('history.txt', 'w')
+            f.close()
+        with open('history.txt', 'a') as file:
             for line in self.history:
                 file.write(line + '\n')
 
@@ -45,7 +51,7 @@ class Warehouse:
     def import_status(self):
         with open('warehouse_status.txt', 'r') as file:
             lines = file.readlines()
-            self.balance = lines[0]
+            self.balance = int(lines[0])
             for product in lines[1:]:
                 self.stock.append(eval(product))
 
