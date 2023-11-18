@@ -1,5 +1,4 @@
 from classes import Manager, Product
-from os.path import exists
 
 manager = Manager()
 
@@ -40,7 +39,7 @@ def export_status(manager):
 def import_status(manager):
     with open('warehouse_status.txt', 'r') as file:
         lines = file.readlines()
-        manager.balance = int(lines[0])
+        manager.balance = lines[0]
         for product in lines[1:]:
             manager.stock.append(eval(product))
 
@@ -112,39 +111,3 @@ def add_product():
         return Product(name, int(quant), int(price))
     else:
         print('Ilość sztuk oraz cena muszą być liczbami dodatnimi')
-
-
-manager.execute('import_status') if exists('warehouse_status.txt') else manager.execute('export_status')
-
-while True:
-    print('Lista komend:\nsaldo\nsprzedaż\nzakup\nkonto\nlista\nmagazyn\nprzegląd\nkoniec\n')
-
-    command = input('Wprowadź komendę: ')
-
-    match command:
-        case 'saldo':
-            a = input('Podaj kwotę do dodania lub odjęcia z konta:\n')
-            # try:
-            manager.execute('change_balance', amount=int(a))
-            # except TypeError:
-            #     print('Należy podać liczbę całkowitą')
-        case 'sprzedaż':
-            manager.execute('sale', product=add_product())
-        case 'zakup':
-            manager.execute('purchase', product=add_product())
-        case 'konto':
-            print(f'Stan konta: {manager.balance}')
-        case 'lista':
-            manager.execute('check_stock')
-        case 'magazyn':
-            name = input('Podaj nazwę wyszukiwanego produktu: ')
-            searched_for = manager.execute('find_product', search_key=name)
-            print(searched_for) if searched_for else print('Brak produktu w magazynie')
-        case 'przegląd':
-            manager.execute('check_history')
-        case 'koniec':
-            break
-        case _:
-            print('Błędna komenda \n')
-
-
