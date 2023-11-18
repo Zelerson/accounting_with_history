@@ -57,7 +57,7 @@ class Warehouse:
             print(item)
 
     def change_balance(self, amount: int):
-        if 0 < self.balance + amount:
+        if 0 <= self.balance + amount:
             self.balance += amount
 
             with open('warehouse_status.txt', 'r') as file:
