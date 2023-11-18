@@ -36,7 +36,7 @@ class Warehouse:
 
     def export_history(self):
         if not exists('history.txt'):
-            f = open('history.txt', 'w')
+            f = open('history.txt', 'x')
             f.close()
         with open('history.txt', 'a') as file:
             for line in self.history:
