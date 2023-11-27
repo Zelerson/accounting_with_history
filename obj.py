@@ -35,10 +35,10 @@ class Warehouse:
             print('Podaj liczby lub brak wartości(enter)')
 
     def export_history(self):
-        if not exists('history.txt'):
-            f = open('history.txt', 'x')
-            f.close()
-        with open('history.txt', 'a') as file:
+        # if not exists('history.txt'):
+        #     f = open('history.txt', 'x')
+        #     f.close()
+        with open('history.txt', 'w') as file:
             for line in self.history:
                 file.write(line + '\n')
 
@@ -72,6 +72,7 @@ class Warehouse:
                 file.writelines(lines)
 
             self.history.append(f'Saldo: {amount}')
+            self.export_status()
             return True
         else:
             print('Debet niedozwolony')
@@ -90,9 +91,8 @@ class Warehouse:
                 self.stock.remove(existing_product)
 
             self.export_status()
-            self.export_history()
         else:
-            print('Brak wystarczającej ilości w magazynie')
+            raise Exception('Brak wystarczającej ilości w magazynie')
 
     # zakup
     def purchase(self, product: Product):
@@ -104,16 +104,11 @@ class Warehouse:
                 self.stock.append(product)
             self.history.append(f'Zakup: {product.name} {product.quant} szt')
             self.export_status()
-            self.export_history()
 
 
-def add_product():
-    name = input('Podaj nazwę produktu:\n')
-    quant = input('Podaj ilość sztuk:\n')
-    price = input('Podaj cenę:\n')
-    if int(quant) > 0 and int(price) > 0:
-        return Product(name, int(quant), int(price))
+def get_history():
+    if exists('history.txt'):
+        with open('history.txt') as file:
+            return file.readlines()
     else:
-        print('Ilość sztuk oraz cena muszą być liczbami dodatnimi')
-
-
+        return []
