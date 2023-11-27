@@ -66,7 +66,7 @@ def handle_purchase():
         return render_template('error.html', error_message=error_message)
 
 
-@app.route('/historia', methods=['POST'])
+@app.route('/historia/', methods=['POST'])
 def show_history():
     wh.export_history()
     number1 = request.form.get('number1')
