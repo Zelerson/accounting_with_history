@@ -18,9 +18,9 @@
     <h4 class="text-center">Historia</h4>
     <table class="table table-striped">
         <tbody>
-            {% for event in history_data %}
+            {% for record in history_data %}
                 <tr>
-                    <td>{{ event }}</td>
+                    <td>{{ record.operation }}</td>
                 </tr>
             {% endfor %}
         </tbody>
